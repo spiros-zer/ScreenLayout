@@ -23,17 +23,30 @@ class SCREENLAYOUT_API AModularPlayerController : public APlayerController, publ
 
 public:
 
+	/**
+	 * Initializes the UScreenLayoutManagerSystem state related variables. It does not and shouldn't check for the
+	 * validity of the variables; it is just a mediator.
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual void InitState();
+
+	/** Binded to the FOnScreenLayoutAddedDelegate and called when the screen layout has been added to the screen. */
+	UFUNCTION(BlueprintNativeEvent)
+	void ScreenLayoutReady();
+	virtual void ScreenLayoutReady_Implementation() {}
+
 	UFUNCTION(BlueprintGetter)	UScreenLayout* GetScreenLayout() const {return ScreenLayout;}
 	UFUNCTION(BlueprintSetter)	void SetScreenLayout(UScreenLayout* InScreenLayout);
 	
 	UPROPERTY(BlueprintAssignable)
 	FOnScreenLayoutAddedDelegate OnScreenLayoutAdded;
 
-	UFUNCTION(BlueprintNativeEvent)
-	void ScreenLayoutReady();
-
 protected:
-	
+
+	/**
+	 * Initializes any state related operations, binds the FOnScreenLayoutAddedDelegate and begins the addition of the
+	 * screen layout to player screen. The order at which the functions are called are of high importance.
+	 */
 	virtual void BeginPlay() override;
 
 	UPROPERTY(BlueprintGetter = "GetScreenLayout")
