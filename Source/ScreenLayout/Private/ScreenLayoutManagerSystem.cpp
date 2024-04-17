@@ -41,6 +41,11 @@ void UScreenLayoutManagerSystem::OnScreenLayoutLoaded()
 				if (AModularPlayerController* ModularPlayerController = Cast<AModularPlayerController>(PlayerController))
 				{
 					ModularPlayerController->SetScreenLayout(ScreenLayout);
+					
+					if (PrimaryWidgetClassForState && StateTag.IsValid())
+					{
+						ScreenLayout->PushWidgetToLayer(StateTag, PrimaryWidgetClassForState.LoadSynchronous());
+					}
 				}
 			}
 		}
