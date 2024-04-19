@@ -32,21 +32,6 @@ public:
 	UFUNCTION(BlueprintGetter, Category = "Screen")
 	TSoftClassPtr<UScreenLayout> GetScreenLayoutClass() const {return ScreenLayoutClass;}
 
-	UFUNCTION(BlueprintSetter, Category = "Screen|State")
-	void SetStateTag(const FGameplayTag InStateTag) {StateTag = InStateTag;}
-	
-	UFUNCTION(BlueprintGetter, Category = "Screen|State")
-	FGameplayTag GetStateTag() const {return StateTag;}
-	
-	UFUNCTION(BlueprintSetter, Category = "Screen|State")
-	void SetPrimaryWidgetClassForState(const TSoftClassPtr<UCommonActivatableWidget> InPrimaryWidget)
-	{
-		PrimaryWidgetClassForState = InPrimaryWidget;
-	}
-
-	UFUNCTION(BlueprintGetter, Category = "Screen|State")
-	TSoftClassPtr<UCommonActivatableWidget> GetPrimaryWidgetClassForState() const {return PrimaryWidgetClassForState;}
-
 protected:
 
 	virtual void OnScreenLayoutLoaded();
@@ -61,21 +46,4 @@ protected:
 		Category = "Screen"
 		)
 	TSoftClassPtr<UScreenLayout> ScreenLayoutClass;
-
-	/** The current state at which the player has the screen layout. This could be game menu, game HUD etc. */
-	UPROPERTY(
-		BlueprintGetter = "GetStateTag",
-		BlueprintSetter = "SetStateTag",
-		Category = "Screen|State",
-		meta = (Categories = "UI.Layer")
-		)
-	FGameplayTag StateTag{};
-
-	/** The first widget that will be shown in for this state. */
-	UPROPERTY(
-		BlueprintGetter = "GetPrimaryWidgetClassForState",
-		BlueprintSetter = "SetPrimaryWidgetClassForState",
-		Category = "Screen|State"
-		)
-	TSoftClassPtr<UCommonActivatableWidget> PrimaryWidgetClassForState{};
 };

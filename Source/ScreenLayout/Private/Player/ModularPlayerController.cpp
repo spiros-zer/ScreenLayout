@@ -3,23 +3,13 @@
 
 #include "Player/ModularPlayerController.h"
 
+#include "ScreenLayout.h"
 #include "ScreenLayoutManagerSystem.h"
-#include "Game/ModularGameMode.h"
-#include "Kismet/GameplayStatics.h"
 
-void AModularPlayerController::InitState()
+bool AModularPlayerController::PushWidgetToLayer(FGameplayTag InLayerTag,
+	TSubclassOf<UCommonActivatableWidget> InActivatableWidgetClass)
 {
-	if (AGameModeBase* GameModeBase = UGameplayStatics::GetGameMode(this))
-	{
-		if (const AModularGameMode* ModularGameMode = Cast<AModularGameMode>(GameModeBase))
-		{
-			if (UScreenLayoutManagerSystem* ScreenLayoutManagerSystem = GetLocalPlayer()->GetSubsystem<UScreenLayoutManagerSystem>())
-			{
-				ScreenLayoutManagerSystem->SetStateTag(ModularGameMode->GetStateTag());
-				ScreenLayoutManagerSystem->SetPrimaryWidgetClassForState(ModularGameMode->GetPrimaryWidgetClassForState());
-			}
-		}
-	}
+	return IsValid(ScreenLayout->PushWidgetToLayer(InLayerTag, InActivatableWidgetClass));
 }
 
 void AModularPlayerController::SetScreenLayout(UScreenLayout* InScreenLayout)
@@ -33,12 +23,6 @@ void AModularPlayerController::BeginPlay()
 	Super::BeginPlay();
 
 	OnScreenLayoutAdded.AddUniqueDynamic(this, &ThisClass::ScreenLayoutReady);
-	
-	/**
-	 * The call to InitState HAS TO take pecedence over the SetupScreenLayoutForPlayer() due to the fact that in a
-	 * different scenarion the state tag and primary widget will not have been set.
-	 */
-	InitState();
 	
 	if (UScreenLayoutManagerSystem* ScreenLayoutManagerSystem = GetLocalPlayer()->GetSubsystem<UScreenLayoutManagerSystem>())
 	{
