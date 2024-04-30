@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameplayTagContainer.h"
 #include "Subsystems/LocalPlayerSubsystem.h"
 #include "ScreenLayoutManagerSystem.generated.h"
 
@@ -25,7 +24,8 @@ public:
 
 	/** Allows this subsystem to be created or not depending on if there are derived classes. */
 	virtual bool ShouldCreateSubsystem(UObject* Outer) const override;
-	
+
+	/** Tries to async load the screen layout widget and then calls OnScreenLayoutLoaded(). */
 	UFUNCTION(BlueprintCallable, Category = "Screen")
 	virtual void SetupScreenLayoutForPlayer();
 	
@@ -34,6 +34,7 @@ public:
 
 protected:
 
+	/** Called when the screen layout has finally loaded. It then proceeds to set it up for the pc. */
 	virtual void OnScreenLayoutLoaded();
 
 	/**
